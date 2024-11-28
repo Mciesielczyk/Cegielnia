@@ -1,2 +1,2 @@
 # Cegielnia
- Symulacją procesów równoczesnych i zarządzaniem zadaniami, które są synchronizowane.
+ Symulacja procesów równoczesnych i zarządzaniem zadaniami, które są synchronizowane.
