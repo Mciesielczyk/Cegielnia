@@ -23,6 +23,7 @@ public:
     // Getter ID pracownika
     int getID() const;
 
+    std::thread& getThread() { return thread_; } 
 private:
     // Funkcja wykonywana w wątku
     void produce();
@@ -32,6 +33,7 @@ private:
     Tasma& tasma_;               // Referencja do taśmy transportowej
     std::thread thread_;         // Wątek pracownika
     std::atomic<bool> running_;  // Flaga kontrolująca działanie wątku
+
 };
 
 #endif // PRACOWNIK_HPP

@@ -39,6 +39,8 @@ int Tasma::pobierz_cegle() {
     return masa_cegly;
 }
 int Tasma::sprawdz_cegle() {
+    std::unique_lock<std::mutex> lock(mtx_);
+    cv_.wait(lock, [this] { return !tasma_.empty(); });
     int masa_cegly = tasma_.front();
     return masa_cegly;
 }

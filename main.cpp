@@ -17,25 +17,23 @@ int main() {
     Tasma tasma(maks_liczba_cegiel, maks_masa);
 
     // Inicjalizacja pracowników
-    Pracownik p1(1, 1, tasma);
-    Pracownik p2(2, 2, tasma);
-    Pracownik p3(3, 3, tasma);
-    Ciezarowka c1(15,1,tasma);
-    // Start pracy pracowników
-    p1.start();
-    p2.start();
-    p3.start();
-    c1.start();
+    //Pracownik p1(1, 1, tasma);
+    //Pracownik p2(2, 2, tasma);
+    //Pracownik p3(3, 3, tasma);
+    Dyspozytor dyspozytor(tasma);
+    dyspozytor.startPracownikow();
+    dyspozytor.startCiezarowek();
+    //Ciezarowka c1(15,1,tasma);
+    // Start pracy pracowni
+
+    //c1.start();
 
     // Symulacja pracy przez 10 sekund
     std::this_thread::sleep_for(std::chrono::seconds(10));
     // Symulacja pracy przez 10 sekund
 
     // Zatrzymanie pracy
-    p1.stop();
-    p2.stop();
-    p3.stop();
-    c1.stop();
-
+    dyspozytor.sygnal2();
+    //c1.stop();
     return 0;
 }

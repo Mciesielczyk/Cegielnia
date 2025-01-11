@@ -28,35 +28,40 @@ void Ciezarowka::stop() {
 
 // Funkcja uruchamiana w wątku - załadunek cegieł
 void Ciezarowka::load() {
-    while(true){
-            int current_load = 0;
-      while (running_ && !tasma_.czy_pusta()) {
-        // Czekamy na dostępność cegły na taśmie
-        int masa_cegly=tasma_.sprawdz_cegle();
+    std::unique_lock<std::mutex> lock(mtx_);
+    int current_load = 0;
+    
+    while (running_) {
+        // Sprawdzamy masę cegły, która jest dostępna na taśmie
+        int masa_cegly = tasma_.sprawdz_cegle();
+        std::cout<<masa_cegly;
+        // Jeśli dodanie cegły do aktualnego ładunku przekroczy ładowność, to nie dodajemy cegły
+        if (current_load + masa_cegly > ladownosc_) {
+            std::cout << "Ciężarówka " << id_ << " jest pełna i gotowa do odjazdu. "
+                      << "Wartość załadunku: " << current_load << "\n";
+            
+            // Symulacja czasu jazdy
+            std::this_thread::sleep_for(std::chrono::milliseconds(600));
+            
+            // Resetowanie ładunku po przejeździe
+            current_load = 0;
+        } else {
+            // Jeśli ładunek nie przekroczy ładowności, pobieramy cegłę
+            masa_cegly = tasma_.pobierz_cegle();
+            current_load += masa_cegly;
 
-        if(current_load+masa_cegly>ladownosc_){
-            std::cout << "Ciężarówka " << id_ << " jest pełna i gotowa do odjazdu.\n";
-            break;
+            std::cout << "Ciężarówka " << id_ << " załadowała cegłę o masie " << masa_cegly << ". "
+                      << "Aktualny ładunek: " << current_load << "/" << ladownosc_ << "\n";
         }
 
-        masa_cegly = tasma_.pobierz_cegle();
-
-        // Dodajemy cegłę do ciężarówki
-        current_load += masa_cegly;
-        std::cout << "Ciężarówka " << id_ << " załadowała cegłę o masie " << masa_cegly << ". "
-                  << "Aktualny ładunek: " << current_load << "/" << ladownosc_ << "\n";
-        
-        if (current_load >= ladownosc_) {
-            std::cout << "Ciężarówka " << id_ << " jest pełna i gotowa do odjazdu.\n";
-            break;
-        }
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Symulacja czasu załadunku
+        // Symulacja czasu załadunku
+        std::this_thread::sleep_for(std::chrono::milliseconds(40));
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(600)); // Symulacja czasu załadunku
 
+    std::cout << "Ciężarówka " << id_ << " zakończyła pracę.\n";
 }
-}
+
+
 
 // Getter ID ciężarówki
 int Ciezarowka::getID() const {

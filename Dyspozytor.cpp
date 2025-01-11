@@ -1,35 +1,51 @@
+// Dyspozytor.cpp
 #include "Dyspozytor.hpp"
-#include <chrono>
-#include <thread>
+#include <iostream>
 
-Dyspozytor::Dyspozytor(int liczba_ciezarowek, int ladownosc, int czas)
-    : liczba_ciezarowek_(liczba_ciezarowek), ladownosc_(ladownosc), czas_(czas) {
+Dyspozytor::Dyspozytor(Tasma& tasma)
+    : tasma_(tasma) {
+    // Tworzymy 3 pracowników, używając std::make_unique
+    pracownicy_.push_back(std::make_unique<Pracownik>(1, 1, tasma_));
+    pracownicy_.push_back(std::make_unique<Pracownik>(2, 2, tasma_));
+    pracownicy_.push_back(std::make_unique<Pracownik>(3, 3, tasma_));
 
-    for (int i = 0; i < liczba_ciezarowek_; ++i) {
-        ciezarowki_.emplace_back(ladownosc_, i + 1);
+    ciezarowki_.push_back(std::make_unique<Ciezarowka>(15, 1, tasma_));
+    //ciezarowki_.push_back(std::make_unique<Ciezarowka>(15, 2, tasma_));
+
+}
+
+Dyspozytor::~Dyspozytor() {
+    sygnal2();
+}
+
+void Dyspozytor::startPracownikow() {
+    std::cout << "Dyspozytor rozpoczyna pracę pracowników.\n";
+
+    for (auto& pracownik : pracownicy_) {
+        pracownik->start();  // Uruchomienie pracy każdego pracownika
     }
 }
 
-void Dyspozytor::rozpocznijPrace() {
-    for (auto& ciezarowka : ciezarowki_) {
-        ciezarowka.rozpocznijTransport();
-    }
-}
-
-void Dyspozytor::wyslijSygnal1() {
-    // Sygnał 1 - pozwól ciężarówce odjechać z niepełnym ładunkiem
-    for (auto& ciezarowka : ciezarowki_) {
-        if (ciezarowka.getAktualnaMasa() < ladownosc_) {
-            ciezarowka.zatrzymajTransport();
-            std::cout << "Ciezarowka " << ciezarowka.getNumer() << " odjechała z niepełnym ładunkiem." << std::endl;
+void Dyspozytor::sygnal2() {
+    std::cout << "Dyspozytor zatrzymuje pracowników.\n";
+    
+    for (auto& pracownik : pracownicy_) {
+        pracownik->stop();  // Zatrzymanie każdego pracownika
+        if (pracownik->getThread().joinable()) {
+            pracownik->getThread().join();  // Czekamy na zakończenie wątku pracownika
         }
     }
 }
 
-void Dyspozytor::wyslijSygnal2() {
-    // Sygnał 2 - zakończ pracę
-    std::cout << "Dyspozytor zakończył pracę!" << std::endl;
+void Dyspozytor::sygnal1(){
+    std::cout<<"Dyspozytor wysyła ciężarówkę. \n";
+
+}
+
+void Dyspozytor::startCiezarowek(){
+    std::cout << "Dyspozytor rozpoczyna pracę cieżarówek.\n";
+
     for (auto& ciezarowka : ciezarowki_) {
-        ciezarowka.zatrzymajTransport();
+        ciezarowka->start();  // Uruchomienie pracy każdego pracownika
     }
 }

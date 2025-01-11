@@ -30,4 +30,6 @@ private:
     Tasma& tasma_;          // Referencja do taśmy
     std::thread thread_;    // Wątek ciężarówki
     std::atomic<bool> running_; // Flaga kontrolująca działanie wątku
+    mutable std::mutex mtx_; // Mutex do synchronizacji
+
 };
