@@ -19,7 +19,9 @@ public:
 private:
     std::vector<std::unique_ptr<Pracownik>> pracownicy_;  // Use unique_ptr for non-copyable Pracownik objects
     std::vector<std::unique_ptr<Ciezarowka>> ciezarowki_;  // Use unique_ptr for non-copyable Pracownik objects
-
+    
+    std::mutex mtx_;  // Mutex do synchronizacji
+    std::condition_variable cv_;  // Zmienna warunkowa
     Tasma& tasma_;
 };
 

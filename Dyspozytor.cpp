@@ -10,7 +10,9 @@ Dyspozytor::Dyspozytor(Tasma& tasma)
     pracownicy_.push_back(std::make_unique<Pracownik>(3, 3, tasma_));
 
     ciezarowki_.push_back(std::make_unique<Ciezarowka>(15, 1, tasma_));
-    //ciezarowki_.push_back(std::make_unique<Ciezarowka>(15, 2, tasma_));
+    ciezarowki_.push_back(std::make_unique<Ciezarowka>(15, 2, tasma_));
+    ciezarowki_.push_back(std::make_unique<Ciezarowka>(15, 3, tasma_));
+
 
 }
 
@@ -43,9 +45,13 @@ void Dyspozytor::sygnal1(){
 }
 
 void Dyspozytor::startCiezarowek(){
-    std::cout << "Dyspozytor rozpoczyna pracę cieżarówek.\n";
+    std::cout << "Dyspozytor rozpoczyna pracę ciężarówek.\n";
 
     for (auto& ciezarowka : ciezarowki_) {
-        ciezarowka->start();  // Uruchomienie pracy każdego pracownika
+        ciezarowka->start();  // Uruchamiamy wątki ciężarówek
     }
+
+    // Początkowe powiadomienie ciężarówek, aby zaczęły pracować naprzemiennie
+    //ciezarowki_[0]->zacznij();  // Powiadomienie pierwszej ciężarówki
+    //ciezarowki_[1]->zacznij();
 }
