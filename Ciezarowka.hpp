@@ -3,11 +3,14 @@
 #include <atomic>
 #include <iostream>
 #include "Tasma.hpp"
+#include "Dyspozytor.hpp"
+
+class Dyspozytor;
 
 class Ciezarowka {
 public:
     // Konstruktor
-    Ciezarowka(int ladownosc, int id, Tasma& tasma);
+    Ciezarowka(int ladownosc, int id, Tasma& tasma, Dyspozytor& dyspozytor);
     
     // Destruktor
     ~Ciezarowka();
@@ -28,10 +31,16 @@ public:
 
     void powiadom();
     void zacznij();
+
+    bool isReady();
+    bool sprawdzStan(Dyspozytor& dyspozytor);
+    std::thread& getThread() { return thread_; } 
+
 private:
     int ladownosc_;         // Ładowność ciężarówki
     int id_;                // ID ciężarówki
     Tasma& tasma_;          // Referencja do taśmy
+    Dyspozytor& dyspozytor_;
     std::thread thread_;    // Wątek ciężarówki
     std::atomic<bool> running_; // Flaga kontrolująca działanie wątku
     mutable std::mutex mtx_; // Mutex do synchronizacji

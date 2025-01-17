@@ -1,18 +1,18 @@
 // Dyspozytor.cpp
 #include "Dyspozytor.hpp"
+#include "Ciezarowka.hpp"
 #include <iostream>
 
-Dyspozytor::Dyspozytor(Tasma& tasma)
+Dyspozytor::Dyspozytor(Tasma& tasma, int liczba_ciezarowek, int ladownosc_ciezarowki)
     : tasma_(tasma) {
     // Tworzymy 3 pracowników, używając std::make_unique
     pracownicy_.push_back(std::make_unique<Pracownik>(1, 1, tasma_));
     pracownicy_.push_back(std::make_unique<Pracownik>(2, 2, tasma_));
     pracownicy_.push_back(std::make_unique<Pracownik>(3, 3, tasma_));
 
-    ciezarowki_.push_back(std::make_unique<Ciezarowka>(15, 1, tasma_));
-    ciezarowki_.push_back(std::make_unique<Ciezarowka>(15, 2, tasma_));
-    ciezarowki_.push_back(std::make_unique<Ciezarowka>(15, 3, tasma_));
-
+    for (int i = 0; i < liczba_ciezarowek; ++i) {
+        ciezarowki_.push_back(std::make_unique<Ciezarowka>(ladownosc_ciezarowki, i + 1, tasma_, *this));
+    }
 
 }
 
@@ -37,11 +37,18 @@ void Dyspozytor::sygnal2() {
             pracownik->getThread().join();  // Czekamy na zakończenie wątku pracownika
         }
     }
+     czy_zatrzymal=true;
+
 }
 
 void Dyspozytor::sygnal1(){
-    std::cout<<"Dyspozytor wysyła ciężarówkę. \n";
-
+    for(auto& ciezarowka : ciezarowki_){
+        if(ciezarowka->isReady()){
+                std::cout<<"Dyspozytor wysyła sygnal.------------------------ \n";
+                 ciezarowka->stop();
+                 break;
+        }
+    }
 }
 
 void Dyspozytor::startCiezarowek(){
@@ -50,8 +57,9 @@ void Dyspozytor::startCiezarowek(){
     for (auto& ciezarowka : ciezarowki_) {
         ciezarowka->start();  // Uruchamiamy wątki ciężarówek
     }
+}
 
-    // Początkowe powiadomienie ciężarówek, aby zaczęły pracować naprzemiennie
-    //ciezarowki_[0]->zacznij();  // Powiadomienie pierwszej ciężarówki
-    //ciezarowki_[1]->zacznij();
+
+bool Dyspozytor::getCzyZatrzymal(){
+    return czy_zatrzymal;
 }

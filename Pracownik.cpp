@@ -46,7 +46,7 @@ void Pracownik::produce() {
         }
 
         // Symulacja czasu produkcji cegły
-        std::this_thread::sleep_for(std::chrono::milliseconds(600)); // Dostosuj czas w razie potrzeby
+        std::this_thread::sleep_for(std::chrono::milliseconds(400)); // Dostosuj czas w razie potrzeby
     }
     std::cout << "Pracownik P" << id_ << " zakończył pracę.\n";
 }
