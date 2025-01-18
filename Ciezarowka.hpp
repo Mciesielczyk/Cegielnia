@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Tasma.hpp"
 #include "Dyspozytor.hpp"
-
+#include <semaphore.h>
 class Dyspozytor;
 
 class Ciezarowka {
@@ -44,7 +44,6 @@ private:
     std::thread thread_;    // Wątek ciężarówki
     std::atomic<bool> running_; // Flaga kontrolująca działanie wątku
     mutable std::mutex mtx_; // Mutex do synchronizacji
-    
     std::condition_variable cv_;  // Zmienna warunkowa do oczekiwania na swoją kolej
     bool ready_to_load_ = false;  
 };

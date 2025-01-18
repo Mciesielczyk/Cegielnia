@@ -8,7 +8,6 @@
 #include "Ciezarowka.hpp"
 #include "Dyspozytor.hpp"
 #include "BledneDane.hpp"
-#include "Signal.hpp"
 #include <csignal>
 #include <sstream>
 #include <fstream>
@@ -25,14 +24,13 @@ void sigint_handler(int signum) {
     }
 }
 void sigusr1_handler(int signum) {
-    std::cout << "Otrzymano sygnał SIGUSR1. Zapisuję dane do pliku...\n";
+    
+    std::cout << "Otrzymano sygnał SIGQUIT. Zapisuję dane do pliku...\n"; //ctrl+ ukosnik
     std::cout.rdbuf(log_file.rdbuf());  // Przekierowujemy std::cout do pliku
 }
-void wypiszDane() {
-    std::cout << "To jest test wypisania do pliku i na ekran.\n";
-    std::cout << "Zawartość taśmy, cegły, praca dyspozytora, itp.\n";
-    // Dodaj inne wypisane informacje
-}
+
+
+
 
 using namespace std;
 int main() {
@@ -41,15 +39,16 @@ int main() {
     std::cout << "PID aktualnego procesu: " << pid << std::endl;
     signal(SIGINT, sigint_handler);
     //signal(SIGTERM, sigterm_handler);
-    signal(SIGUSR1, sigusr1_handler);
+    signal(SIGQUIT, sigusr1_handler);
+//kill -USR1 1730367
 
     // Parametry taśmy
     int maks_liczba_cegiel = 10; // Maksymalna liczba cegieł
     int maks_masa = 15;          // Maksymalna masa
     int ladownosc_ciezarowki = 15; // Ładowność każdej ciężarówki
     int liczba_ciezarowek = 3;    // Liczba dostępnych ciężarówek
-    int czas_trwania_symulacji = 12; //podzielony przez 5
-    int liczba_signal1 = 3;
+    int czas_trwania_symulacji = 3; //podzielony przez 5
+    int liczba_signal1 = 2;
 
     try {
         // std::cout << "WITAJ UZYTKOWNIKU" << std::endl << "WPROWADZ: " << std::endl;
@@ -76,7 +75,6 @@ int main() {
             //mozliwosc korzystania z ctrl+c do wysylania sygnalu
             }
     
-  
 
     // Zatrzymanie pracy
     mydyspozytor.sygnal2();
