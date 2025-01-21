@@ -15,9 +15,16 @@ void sigint_handler(int signum) {
     }
 }
 
+void handleSignal(int signal) {
+    if (signal == SIGUSR1) {
+        std::cout << "Otrzymano sygnał SIGUSR1!" << std::endl;
+        dyspozytor->sygnal2();
+    }
+}
+
 void sigusr1_handler(int signum) {
     
-    std::cout << "Otrzymano sygnał SIGQUIT. Zapisuję dane do pliku...\n"; //ctrl+ ukosnik
+    std::cout << "Otrzymano sygnał SIGUSR1. Zapisuję dane do pliku...\n"; //ctrl+ ukosnik
     std::cout.rdbuf(log_file.rdbuf());  // Przekierowujemy std::cout do pliku
 }
 

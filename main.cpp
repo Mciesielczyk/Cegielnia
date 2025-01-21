@@ -9,7 +9,8 @@ int main() {
 
     signal(SIGINT, sigint_handler);
     signal(SIGQUIT, sigusr1_handler);
-    
+    signal(SIGUSR1, handleSignal);
+
     const std::string filename = "output_log.txt";
 
     if (!file_exists(filename)) {
@@ -30,8 +31,8 @@ int main() {
     int maks_masa = 15;          // Maksymalna masa na tasmie
     int ladownosc_ciezarowki = 15; // Ładowność każdej ciężarówki
     int liczba_ciezarowek = 3;    // Liczba dostępnych ciężarówek
-    int czas_trwania_symulacji = 3;  //dokladniej to ilosc rund
-    int liczba_signal1 = 2;  //ile chcemy zeby dyspozytor wydal syngnalow
+    int czas_trwania_symulacji = 8;  //czas w jednej rundzie
+    int liczba_signal1 = 3;  //ile chcemy zeby dyspozytor wydal syngnalow/ ilosc rund
 
     try {
         // std::cout << "WITAJ UZYTKOWNIKU" << std::endl << "WPROWADZ: " << std::endl;

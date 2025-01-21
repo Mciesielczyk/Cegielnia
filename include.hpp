@@ -20,6 +20,7 @@
 bool file_exists(const std::string& filename);
 void sigint_handler(int signum);
 void sigusr1_handler(int signum);
+void handleSignal(int signum);
 
 extern std::ofstream log_file;  
 extern Dyspozytor* dyspozytor; 
