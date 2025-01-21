@@ -1,0 +1,64 @@
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 3
+[32mPobrano cegłę o masie 3. Pozostała masa na taśmie: 0[0m
+Ciężarówka 3 załadowała cegłę o masie 3. Aktualny ładunek: 6/15
+[32mDodano cegłę o masie 1. Aktualna masa: 1. Ilość cegieł: 1[0m
+[32mDodano cegłę o masie 2. Aktualna masa: 3. Ilość cegieł: 2[0m
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 1
+[32mDodano cegłę o masie 3. Aktualna masa: 6. Ilość cegieł: 3[0m
+[32mPobrano cegłę o masie 1. Pozostała masa na taśmie: 5[0m
+Ciężarówka 3 załadowała cegłę o masie 1. Aktualny ładunek: 7/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 2
+[32mPobrano cegłę o masie 2. Pozostała masa na taśmie: 3[0m
+Ciężarówka 3 załadowała cegłę o masie 2. Aktualny ładunek: 9/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 3
+[32mPobrano cegłę o masie 3. Pozostała masa na taśmie: 0[0m
+Ciężarówka 3 załadowała cegłę o masie 3. Aktualny ładunek: 12/15
+[32mDodano cegłę o masie 1. Aktualna masa: 1. Ilość cegieł: 1[0m
+[32mDodano cegłę o masie 2. Aktualna masa: 3. Ilość cegieł: 2[0m
+[32mDodano cegłę o masie 3. Aktualna masa: 6. Ilość cegieł: 3[0m
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 1
+[32mPobrano cegłę o masie 1. Pozostała masa na taśmie: 5[0m
+Ciężarówka 3 załadowała cegłę o masie 1. Aktualny ładunek: 13/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 2
+[32mPobrano cegłę o masie 2. Pozostała masa na taśmie: 3[0m
+Ciężarówka 3 załadowała cegłę o masie 2. Aktualny ładunek: 15/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 3
+Ciężarówka 3 jest gotowa do odjazdu. Aktualny ładunek: 15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 3
+[32mPobrano cegłę o masie 3. Pozostała masa na taśmie: 0[0m
+Ciężarówka 1 załadowała cegłę o masie 3. Aktualny ładunek: 3/15
+[32mDodano cegłę o masie 1. Aktualna masa: 1. Ilość cegieł: 1[0m
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 1
+[32mDodano cegłę o masie 2. Aktualna masa: 3. Ilość cegieł: 2[0m
+[32mDodano cegłę o masie 3. Aktualna masa: 6. Ilość cegieł: 3[0m
+[32mPobrano cegłę o masie 1. Pozostała masa na taśmie: 5[0m
+Ciężarówka 1 załadowała cegłę o masie 1. Aktualny ładunek: 4/15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 2
+[32mPobrano cegłę o masie 2. Pozostała masa na taśmie: 3[0m
+Ciężarówka 1 załadowała cegłę o masie 2. Aktualny ładunek: 6/15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 3
+[32mPobrano cegłę o masie 3. Pozostała masa na taśmie: 0[0m
+Ciężarówka 1 załadowała cegłę o masie 3. Aktualny ładunek: 9/15
+[32mDodano cegłę o masie 1. Aktualna masa: 1. Ilość cegieł: 1[0m
+[32mDodano cegłę o masie 2. Aktualna masa: 3. Ilość cegieł: 2[0m
+[32mDodano cegłę o masie 3. Aktualna masa: 6. Ilość cegieł: 3[0m
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 1
+[32mPobrano cegłę o masie 1. Pozostała masa na taśmie: 5[0m
+Ciężarówka 1 załadowała cegłę o masie 1. Aktualny ładunek: 10/15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 2
+[32mPobrano cegłę o masie 2. Pozostała masa na taśmie: 3[0m
+Ciężarówka 1 załadowała cegłę o masie 2. Aktualny ładunek: 12/15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 3
+[32mPobrano cegłę o masie 3. Pozostała masa na taśmie: 0[0m
+Ciężarówka 1 załadowała cegłę o masie 3. Aktualny ładunek: 15/15
+[35mDyspozytor wysyła sygnal.------------------------ [0m
+[35mDyspozytor zatrzymuje pracowników. [0m
+[94mPracownik P1 zakończył pracę.
+[0m[94mPracownik P2 zakończył pracę.
+[0m[94mPracownik P3 zakończył pracę.
+[0mCiężarówka 1 sprawdza teoretyczną cegłę o masie: 0
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 0
+Ostatnia ciężarówka 1 dowiozła cegły.
+Ciężarówka 2 konczy zywot 
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 0
+Ciężarówka 3 konczy zywot 

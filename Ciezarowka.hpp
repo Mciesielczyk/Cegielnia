@@ -9,41 +9,36 @@ class Dyspozytor;
 
 class Ciezarowka {
 public:
-    // Konstruktor
     Ciezarowka(int ladownosc, int id, Tasma& tasma, Dyspozytor& dyspozytor);
     
-    // Destruktor
     ~Ciezarowka();
     
-    // Rozpoczęcie pracy ciężarówki
     void start();
     
-    // Zakończenie pracy ciężarówki
     void stop();
     
-    // Funkcja uruchamiana w wątku
     void load();
 
-    // Getter ID ciężarówki
     int getID() const;
 
     void czekaj();
 
     void powiadom();
+
     void zacznij();
 
     bool isReady();
+
     bool sprawdzStan(Dyspozytor& dyspozytor);
+
     std::thread& getThread() { return thread_; } 
 
 private:
-    int ladownosc_;         // Ładowność ciężarówki
-    int id_;                // ID ciężarówki
-    Tasma& tasma_;          // Referencja do taśmy
+    int ladownosc_;        
+    int id_;                
+    Tasma& tasma_;          
     Dyspozytor& dyspozytor_;
-    std::thread thread_;    // Wątek ciężarówki
-    std::atomic<bool> running_; // Flaga kontrolująca działanie wątku
-    mutable std::mutex mtx_; // Mutex do synchronizacji
-    std::condition_variable cv_;  // Zmienna warunkowa do oczekiwania na swoją kolej
+    std::thread thread_;    
+    std::atomic<bool> running_; 
     bool ready_to_load_ = false;  
 };

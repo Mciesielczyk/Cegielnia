@@ -14,17 +14,17 @@ public:
     Dyspozytor(Tasma& tasma,  int liczba_ciezarowek, int ladownosc_ciezarowki);
     ~Dyspozytor();
 
-    void startPracownikow();  // Uruchomienie wszystkich pracowników
+    void startPracownikow();  
     void startCiezarowek();
     void sygnal2();   // Zatrzymanie wszystkich pracowników
-    void sygnal1();
+    void sygnal1();       // wyslanie ciezarowki
     bool getCzyZatrzymal();
 private:
-    std::vector<std::unique_ptr<Pracownik>> pracownicy_;  // Use unique_ptr for non-copyable Pracownik objects
-    std::vector<std::unique_ptr<Ciezarowka>> ciezarowki_;  // Use unique_ptr for non-copyable Pracownik objects
+    std::vector<std::unique_ptr<Pracownik>> pracownicy_;  
+    std::vector<std::unique_ptr<Ciezarowka>> ciezarowki_;  
     
-    std::mutex mtx_;  // Mutex do synchronizacji
-    std::condition_variable cv_;  // Zmienna warunkowa
+    std::mutex mtx_;  
+    std::condition_variable cv_;  
     Tasma& tasma_;
     bool czy_zatrzymal=false;
 
