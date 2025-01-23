@@ -56,7 +56,7 @@ void Ciezarowka::load()
 
             std::string wiadomosc = "Ciężarówka " + std::to_string(id_) + " sprawdza teoretyczną cegłę o masie: " + std::to_string(masa_cegly);
             {
-                std::lock_guard<std::mutex> lock(cout_mutex);
+                //std::lock_guard<std::mutex> lock(cout_mutex);
                 std::cout << wiadomosc << std::endl;
             }
 
@@ -72,7 +72,7 @@ void Ciezarowka::load()
                 if (masa_cegly != 0)
                 {
                     {
-                        std::lock_guard<std::mutex> lock(cout_mutex);
+                       // std::lock_guard<std::mutex> lock(cout_mutex);
                         std::cout << "Ciężarówka " << id_ << " załadowała cegłę o masie " << masa_cegly << ". "
                                   << "Aktualny ładunek: " << current_load << "/" << ladownosc_ << "\n";
                     }
@@ -100,7 +100,7 @@ void Ciezarowka::load()
         }
         {
 
-            std::lock_guard<std::mutex> lock(cout_mutex);
+           // std::lock_guard<std::mutex> lock(cout_mutex);
             std::cout << "Ciężarówka " << id_ << " jest gotowa do odjazdu. " << "Aktualny ładunek: " << current_load << "\n";
         }
         ready_to_load_ = false;
