@@ -53,7 +53,7 @@ void Ciezarowka::load()
         {
             ready_to_load_ = true;
             int masa_cegly = tasma_.sprawdz_cegle();
-
+           // tasma_.debugKolejka();
             std::string wiadomosc = "Ciężarówka " + std::to_string(id_) + " sprawdza teoretyczną cegłę o masie: " + std::to_string(masa_cegly);
             {
                 //std::lock_guard<std::mutex> lock(cout_mutex);
@@ -65,7 +65,7 @@ void Ciezarowka::load()
             {
                 running_ = false;
             }
-            else
+            else if (masa_cegly != 0)
             {
                 masa_cegly = tasma_.pobierz_cegle();
                 current_load += masa_cegly;
@@ -79,7 +79,7 @@ void Ciezarowka::load()
                 }
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(70));
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
                                                                        
             if (dyspozytor_.getCzyZatrzymal() && tasma_.czy_pusta())
             {

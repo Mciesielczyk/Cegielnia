@@ -1,118 +1,146 @@
 #include "Tasma.hpp"
 #include <iostream>
-#include <sys/mman.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <cstring>
-#include <sys/stat.h> 
+#include <stdexcept>
+#include <semaphore.h>  // Nagłówek dla semaforów POSIX
 
 Tasma::Tasma(int maks_liczba_cegiel, int maks_masa)
-    : maks_liczba_cegiel_(maks_liczba_cegiel), maks_masa_(maks_masa), aktualna_masa_(0) {
-
-    // Tworzenie pamięci współdzielonej
-    int fd = -1;
-    if ((fd = open(SHM_NAME, O_CREAT | O_RDWR, 0666)) == -1) {
-        std::cerr << "Unable to open shared memory file." << std::endl;
-        return;
-    }
-
-    // Ustawienie rozmiaru pamięci współdzielonej (tablica cegieł + zmienne front, rear, count, aktualna_masa)
-    size_t size = sizeof(int) * maks_liczba_cegiel + sizeof(std::atomic<int>) * 4;  // Tablica + front, rear, count, aktualna_masa
-    if (ftruncate(fd, size) == -1) {
-        std::cerr << "Unable to set size of shared memory." << std::endl;
-        close(fd);
-        return;
-    }
-
-    // Mapowanie pamięci współdzielonej
-    SharedMemory* shared_mem = (SharedMemory*)mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-    if (shared_mem == MAP_FAILED) {
-        std::cerr << "Unable to map shared memory." << std::endl;
-        close(fd);
-        return;
-    }
-
-    // Inicjalizacja pamięci współdzielonej
-    //shared_mem->tasma = (int*)shared_mem + 4;  // Offset dla tablicy cegieł
-    memset(shared_mem->tasma, 0, sizeof(int) * maks_liczba_cegiel);  // Zerowanie tablicy cegieł
-
-    // Inicjalizacja atomowych zmiennych
-    shared_mem->front = 0;
-    shared_mem->rear = 0;
-    shared_mem->count = 0;
-    shared_mem->aktualna_masa = 0;
-
-    // Zamknięcie pliku po zakończeniu pracy z pamięcią współdzieloną
-    close(fd);
-
-    // Użycie pamięci współdzielonej w klasie
-    tasma_ = shared_mem->tasma;
-//front_.store(shared_mem->front.load());
-//rear_.store(shared_mem->rear.load());
-//count_.store(shared_mem->count.load());
-//aktualna_masa_.store(shared_mem->aktualna_masa.load());
-
+    : maks_liczba_cegiel_(maks_liczba_cegiel), maks_masa_(maks_masa), shm_fd_(-1), shm_size_(sizeof(SharedQueue)) {
+    utworzPamiecDzielona();
+    // Tworzenie semaforów
+    sem_mutex_ = sem_open("/semafor_mutex", O_CREAT, 0666, 1);          // Semafor do wzajemnego wykluczania
+    sem_space_available_ = sem_open("/semafor_space", O_CREAT, 0666, 1000); // Semafor na miejsce w kolejce
+    sem_items_available_ = sem_open("/semafor_items", O_CREAT, 0666, 0);    // Semafor do dostępnych cegieł
 }
 
 Tasma::~Tasma() {
-    // Zwolnienie pamięci współdzielonej
-    if (munmap(tasma_, sizeof(int) * maks_liczba_cegiel_ + sizeof(std::atomic<int>) * 4) == -1) {
-        std::cerr << "Unable to unmap shared memory." << std::endl;
+    zwolnijPamiecDzielona();
+    // Usuwanie semaforów
+    sem_close(sem_mutex_);
+    sem_unlink("/semafor_mutex");
+
+    sem_close(sem_space_available_);
+    sem_unlink("/semafor_space");
+
+    sem_close(sem_items_available_);
+    sem_unlink("/semafor_items");
+}
+
+void Tasma::utworzPamiecDzielona() {
+    // Tworzenie/otwieranie pamięci dzielonej
+    shm_fd_ = shm_open(shm_name_, O_CREAT | O_RDWR, 0666);
+    if (shm_fd_ == -1) {
+        perror("shm_open");
+        throw std::runtime_error("Nie udało się utworzyć pamięci dzielonej");
     }
-    shm_unlink(SHM_NAME);
+
+    // Ustawienie rozmiaru pamięci dzielonej
+    if (ftruncate(shm_fd_, shm_size_) == -1) {
+        perror("ftruncate");
+        close(shm_fd_);
+        throw std::runtime_error("Nie udało się ustawić rozmiaru pamięci dzielonej");
+    }
+
+    // Mapowanie pamięci dzielonej do przestrzeni adresowej procesu
+    void* ptr = mmap(nullptr, shm_size_, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd_, 0);
+    if (ptr == MAP_FAILED) {
+        perror("mmap");
+        close(shm_fd_);
+        throw std::runtime_error("Nie udało się zamapować pamięci dzielonej");
+    }
+
+    shared_queue_ = static_cast<SharedQueue*>(ptr);
+
+    // Inicjalizacja kolejki w pamięci dzielonej
+    shared_queue_->head = 0;
+    shared_queue_->tail = 0;
+    shared_queue_->aktualna_masa_ = 0;
+
+    memset(shared_queue_->data, 0, sizeof(shared_queue_->data));
+}
+
+void Tasma::zwolnijPamiecDzielona() {
+    if (shared_queue_) {
+        munmap(shared_queue_, shm_size_);
+        shared_queue_ = nullptr;
+    }
+    if (shm_fd_ != -1) {
+        close(shm_fd_);
+        shm_unlink(shm_name_);
+        shm_fd_ = -1;
+    }
 }
 
 bool Tasma::dodaj_cegle(int masa_cegly) {
-    std::unique_lock<std::mutex> lock(mtx_);
+    // Zablokowanie semafora mutex
+    sem_wait(sem_mutex_);
 
-    // Sprawdzanie, czy jest miejsce na taśmie i czy masa nie zostanie przekroczona
-    if (tasma_[count_] < maks_liczba_cegiel_ && (tasma_[aktualna_masa_] + masa_cegly) <= maks_masa_) {
-        tasma_[tasma_[rear_]] = masa_cegly;  // Dodanie cegły na taśmę
-        tasma_[rear_] = (tasma_[rear_] + 1) % maks_liczba_cegiel_;
-        tasma_[count_]++;
-        tasma_[aktualna_masa_] += masa_cegly;
+    // Sprawdzenie, czy można dodać cegłę
+    bool jest_miejsce_na_cegle = (shared_queue_->tail + 1) % 1000 != shared_queue_->head;
+    bool masa_w_normie = (shared_queue_->aktualna_masa_ + masa_cegly <= maks_masa_);
 
-        std::string message = "Dodano cegłę o masie " + std::to_string(masa_cegly) + ". Aktualna masa: " + std::to_string(tasma_[aktualna_masa_]) + ". Ilość cegieł: " + std::to_string(tasma_[count_]);
-        std::cout << "\x1b[32m" << message << "\x1b[0m" << std::endl;
+    if (jest_miejsce_na_cegle && masa_w_normie) {
+        // Dodawanie cegły
+        shared_queue_->data[shared_queue_->tail] = masa_cegly;
+        shared_queue_->tail = (shared_queue_->tail + 1) % 1000;
+        shared_queue_->aktualna_masa_ += masa_cegly;
 
-        cv_.notify_one();  // Powiadomienie, że jest cegła do pobrania
+        std::cout << "Dodano cegłę o masie: " << masa_cegly << "\n";
+        
+        // Odblokowanie semafora mutex
+        sem_post(sem_mutex_);
+        
+        // Zwiększenie semafora items_available, bo cegła jest dostępna
+        sem_post(sem_items_available_);
+
         return true;
-    } else {
-        // Taśma jest pełna lub masa zostanie przekroczona
-        return false;
     }
+
+    // Odblokowanie semafora mutex, jeśli nie dodano cegły
+    sem_post(sem_mutex_);
+    return false;
 }
 
 int Tasma::pobierz_cegle() {
-    std::unique_lock<std::mutex> lock(mtx_);
+    // Czekanie na dostępność cegły
+    sem_wait(sem_items_available_);
 
-    // Czekaj, aż na taśmie pojawi się cegła
-    cv_.wait_for(lock, std::chrono::milliseconds(500), [this]{ return tasma_[count_] > 0; });
+    // Zablokowanie semafora mutex
+    sem_wait(sem_mutex_);
 
-    // Pobranie cegły
-    if (tasma_[count_] > 0) {
-        int masa_cegly = tasma_[tasma_[front_]];
-        tasma_[tasma_[front_]] = 0;  // Oczyszczamy miejsce na taśmie
-        tasma_[front_] = (tasma_[front_] + 1) % maks_liczba_cegiel_;
-        tasma_[count_]--;
-        tasma_[aktualna_masa_] -= masa_cegly;
+    // Pobieranie cegły
+    int masa_cegly = shared_queue_->data[shared_queue_->head];
+    shared_queue_->head = (shared_queue_->head + 1) % 1000;
+    shared_queue_->aktualna_masa_ -= masa_cegly;
 
-        std::string message1 = "Pobrano cegłę o masie " + std::to_string(masa_cegly) + ". Pozostała masa na taśmie: " + std::to_string(tasma_[aktualna_masa_]);
-        std::cout << "\x1b[32m" << message1 << "\x1b[0m" << std::endl;
+    std::cout << "Pobrano cegłę o masie: " << masa_cegly << ". Aktualna masa: " << shared_queue_->aktualna_masa_ << "\n";
+    
+    // Odblokowanie semafora mutex
+    sem_post(sem_mutex_);
 
-        return masa_cegly;
-    }
-    return 0;  // Brak cegieł
+    // Zwiększenie semafora space_available, bo jest miejsce na cegłę
+    sem_post(sem_space_available_);
+
+    return masa_cegly;
 }
 
 int Tasma::sprawdz_cegle() {
-    std::unique_lock<std::mutex> lock(mtx_);
+    // Zablokowanie semafora mutex
+    sem_wait(sem_mutex_);
 
-    cv_.wait_for(lock, std::chrono::milliseconds(500), [this]{ return tasma_[count_] > 0; });
+    int masa_cegly = shared_queue_->data[shared_queue_->head];
 
-    return tasma_[tasma_[front_]];  // Zwraca masę cegły na taśmie
+    // Odblokowanie semafora mutex
+    sem_post(sem_mutex_);
+    
+    return masa_cegly;
 }
 
 bool Tasma::czy_pusta() const {
-    return tasma_[count_] == 0;
+    return shared_queue_->head == shared_queue_->tail;
+}
+
+void Tasma::debugKolejka() {
+    std::cout << "Head: " << shared_queue_->head
+              << ", Tail: " << shared_queue_->tail
+              << ", Aktualna masa: " << shared_queue_->aktualna_masa_ << "\n";
 }

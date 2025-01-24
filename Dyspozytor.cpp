@@ -30,9 +30,6 @@ std::cout << "\x1b[35mDyspozytor zatrzymuje pracowników. \x1b[0m" << std::endl;
     
     for (auto& pracownik : pracownicy_) {
         pracownik->stop();  // Zatrzymanie każdego pracownika
-        if (pracownik->getThread().joinable()) {
-            pracownik->getThread().join();  // Czekamy na zakończenie wątku 
-        }
     }
      czy_zatrzymal=true;
 

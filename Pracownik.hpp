@@ -1,10 +1,9 @@
-
 #ifndef PRACOWNIK_HPP
 #define PRACOWNIK_HPP
 
-#include <thread>
-#include <atomic>
 #include "Tasma.hpp"
+#include <atomic>
+#include <sys/types.h> // Dla pid_t
 
 class Pracownik {
 public:
@@ -12,23 +11,20 @@ public:
 
     ~Pracownik();
 
-    void start();
+    void start();   // Uruchomienie procesu
 
-    void stop();
+    void stop();    // Zatrzymanie procesu
 
-    int getID() const;
+    int getID() const; // Pobierz ID pracownika
 
-    std::thread& getThread() { return thread_; } 
 private:
-    // Funkcja wykonywana w wątku
-    void produce();
+    void produce(); // Funkcja wykonywana w procesie potomnym
 
-    int id_;                     
-    int masa_cegly_;             
-    Tasma& tasma_;              
-    std::thread thread_;        
-    std::atomic<bool> running_;  // atomowa, ze inne watki nie maja dostepu do niej
-
+    int id_;                     // Identyfikator pracownika
+    int masa_cegly_;             // Masa cegły, którą dodaje
+    Tasma& tasma_;               // Referencja do taśmy
+    pid_t pid_;                  // Identyfikator procesu potomnego
+    std::atomic<bool> running_;  // Flaga kontrolująca stan pracy
 };
 
-#endif 
+#endif
