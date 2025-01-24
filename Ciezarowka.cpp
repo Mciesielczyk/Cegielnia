@@ -79,7 +79,7 @@ void Ciezarowka::load()
                 }
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            std::this_thread::sleep_for(std::chrono::milliseconds(CZAS_ZALADUNKU));
                                                                        
             if (dyspozytor_.getCzyZatrzymal() && tasma_.czy_pusta())
             {
@@ -87,7 +87,7 @@ void Ciezarowka::load()
                 sem_post(&load_semaphore_); // Podnosimy semafor, pozwalając innym wątkom kontynuować
                 if (current_load != 0)
                 {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1000)); // czekamy az dowiezie
+                    std::this_thread::sleep_for(std::chrono::milliseconds(CZAS_ROZLADUNKU)); // czekamy az dowiezie
                     std::cout << "Ostatnia ciężarówka " << id_ << " dowiozła cegły." << std::endl;
                 }
                 else

@@ -5,6 +5,10 @@
 #include "Tasma.hpp"
 #include "Dyspozytor.hpp"
 #include <semaphore.h>
+
+#define CZAS_ZALADUNKU 100
+#define CZAS_ROZLADUNKU 1500
+
 class Dyspozytor;
 
 class Ciezarowka {
@@ -20,12 +24,6 @@ public:
     void load();
 
     int getID() const;
-
-    void czekaj();
-
-    void powiadom();
-
-    void zacznij();
 
     bool isReady();
 

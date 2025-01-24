@@ -331,3 +331,108 @@ Ciężarówka 1 konczy zywot
 [35mDyspozytor wysyła sygnal.------------------------ [0m
 [35mDyspozytor wysyła sygnal.------------------------ [0m
 [35mDyspozytor zatrzymuje pracowników. [0m
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 6
+Ciężarówka 3 załadowała cegłę o masie 1. Aktualny ładunek: 9/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 9
+Ciężarówka 3 załadowała cegłę o masie 3. Aktualny ładunek: 12/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 2
+Pobrano cegłę o masie: 2. Aktualna masa: 7
+Ciężarówka 3 załadowała cegłę o masie 2. Aktualny ładunek: 14/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 6
+Ciężarówka 3 załadowała cegłę o masie 1. Aktualny ładunek: 15/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 3
+Ciężarówka 3 jest gotowa do odjazdu. Aktualny ładunek: 15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 9
+Ciężarówka 1 załadowała cegłę o masie 3. Aktualny ładunek: 3/15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 2
+Pobrano cegłę o masie: 2. Aktualna masa: 13
+Ciężarówka 1 załadowała cegłę o masie 2. Aktualny ładunek: 5/15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 12
+Ciężarówka 1 załadowała cegłę o masie 1. Aktualny ładunek: 6/15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 9
+Ciężarówka 1 załadowała cegłę o masie 3. Aktualny ładunek: 9/15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 2
+Pobrano cegłę o masie: 2. Aktualna masa: 13
+Ciężarówka 1 załadowała cegłę o masie 2. Aktualny ładunek: 11/15
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 12
+Ciężarówka 1 załadowała cegłę o masie 1. Aktualny ładunek: 12/15
+[35mDyspozytor wysyła sygnal.------------------------ [0m
+Ciężarówka 1 jest gotowa do odjazdu. Aktualny ładunek: 12
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 12
+Ciężarówka 2 załadowała cegłę o masie 3. Aktualny ładunek: 3/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 2
+Pobrano cegłę o masie: 2. Aktualna masa: 10
+Ciężarówka 2 załadowała cegłę o masie 2. Aktualny ładunek: 5/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 9
+Ciężarówka 2 załadowała cegłę o masie 1. Aktualny ładunek: 6/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 12
+Ciężarówka 2 załadowała cegłę o masie 3. Aktualny ładunek: 9/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 2
+Pobrano cegłę o masie: 2. Aktualna masa: 10
+Ciężarówka 2 załadowała cegłę o masie 2. Aktualny ładunek: 11/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 13
+Ciężarówka 2 załadowała cegłę o masie 1. Aktualny ładunek: 12/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 10
+Ciężarówka 2 załadowała cegłę o masie 3. Aktualny ładunek: 15/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 3
+Ciężarówka 2 jest gotowa do odjazdu. Aktualny ładunek: 15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 11
+Ciężarówka 3 załadowała cegłę o masie 3. Aktualny ładunek: 3/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 2
+Pobrano cegłę o masie: 2. Aktualna masa: 9
+Ciężarówka 3 załadowała cegłę o masie 2. Aktualny ładunek: 5/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 14
+Ciężarówka 3 załadowała cegłę o masie 1. Aktualny ładunek: 6/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 11
+Ciężarówka 3 załadowała cegłę o masie 3. Aktualny ładunek: 9/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 10
+Ciężarówka 3 załadowała cegłę o masie 1. Aktualny ładunek: 10/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 12
+Ciężarówka 3 załadowała cegłę o masie 3. Aktualny ładunek: 13/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 11
+Ciężarówka 3 załadowała cegłę o masie 1. Aktualny ładunek: 14/15
+[35mDyspozytor zatrzymuje pracowników. [0m
+[94mPracownik P1 został zatrzymany.
+[0m[94mPracownik P2 został zatrzymany.
+[0m[94mPracownik P3 został zatrzymany.
+[0mCiężarówka 3 sprawdza teoretyczną cegłę o masie: 3
+Ciężarówka 3 jest gotowa do odjazdu. Aktualny ładunek: 14
+Ciężarówka 1 jest gotowa do odjazdu. Aktualny ładunek: 0
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 8
+Ciężarówka 2 załadowała cegłę o masie 3. Aktualny ładunek: 3/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 2
+Pobrano cegłę o masie: 2. Aktualna masa: 6
+Ciężarówka 2 załadowała cegłę o masie 2. Aktualny ładunek: 5/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 1
+Pobrano cegłę o masie: 1. Aktualna masa: 5
+Ciężarówka 2 załadowała cegłę o masie 1. Aktualny ładunek: 6/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 3
+Pobrano cegłę o masie: 3. Aktualna masa: 2
+Ciężarówka 2 załadowała cegłę o masie 3. Aktualny ładunek: 9/15
+Ciężarówka 2 sprawdza teoretyczną cegłę o masie: 2
+Pobrano cegłę o masie: 2. Aktualna masa: 0
+Ciężarówka 2 załadowała cegłę o masie 2. Aktualny ładunek: 11/15
+Ciężarówka 3 sprawdza teoretyczną cegłę o masie: 0
+Ciężarówka 3 konczy zywot 
+Ciężarówka 1 sprawdza teoretyczną cegłę o masie: 0
+Ciężarówka 1 konczy zywot 
+Ostatnia ciężarówka 2 dowiozła cegły.

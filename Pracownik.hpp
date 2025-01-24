@@ -4,6 +4,15 @@
 #include "Tasma.hpp"
 #include <atomic>
 #include <sys/types.h> // Dla pid_t
+#include <csignal> // Do obsługi sygnałów (np. zatrzymanie procesu)
+#include <sys/prctl.h> // Nagłówek dla prctl()
+#include <chrono>
+#include <iostream>
+#include <sys/types.h>
+#include <unistd.h>
+#include <csignal> // Do obsługi sygnałów (np. zatrzymanie procesu)
+
+#define CZAS_PRACY_PRACOWNIKA 500
 
 class Pracownik {
 public:
@@ -16,12 +25,12 @@ public:
     void stop();    // Zatrzymanie procesu
 
     int getID() const; // Pobierz ID pracownika
-
 private:
     void produce(); // Funkcja wykonywana w procesie potomnym
 
     int id_;                     // Identyfikator pracownika
     int masa_cegly_;             // Masa cegły, którą dodaje
+    int czas_pracy_pracownika;
     Tasma& tasma_;               // Referencja do taśmy
     pid_t pid_;                  // Identyfikator procesu potomnego
     std::atomic<bool> running_;  // Flaga kontrolująca stan pracy
