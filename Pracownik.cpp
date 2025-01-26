@@ -24,8 +24,7 @@ void Pracownik::start() {
         // Zmiana nazwy procesu 
         std::string process_name = "Pracownik: " + std::to_string(id_);
         prctl(PR_SET_NAME, process_name.c_str(), 0, 0, 0);  // Ustawienie nazwy procesu
-
-        produce();
+        produce(); // Uruchomienie funkcji produkcji, tutaj dzieje się cała praca pracownika
         exit(0); //proces potomny się kończy po wykonaniu zadania
     } else {
         // Kod wykonywany przez proces rodzica
@@ -51,7 +50,7 @@ int Pracownik::getID() const {
 }
 
 void Pracownik::produce() {
-    while (running_) {
+    while (running_) { // Pętla będzie działać dopóki 'running_' jest true, czyli przez cały czas trwania programu
         bool dodano = tasma_.dodaj_cegle(masa_cegly_);
 
         if (dodano) {

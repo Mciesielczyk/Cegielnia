@@ -7,12 +7,14 @@ int main() {
     pid_t pid = getpid();  // Pobieramy PID aktualnego procesu
     std::cout << "PID aktualnego procesu: " << pid << std::endl;
 
+    // Rejestracja funkcji obsługi sygnałów:
     signal(SIGINT, sigint_handler);
     signal(SIGQUIT, sigusr1_handler);
     signal(SIGUSR1, handleSignal);
 
     const std::string filename = "output_log.txt";
 
+    // Sprawdzenie, czy plik istnieje przed próbą jego otwarcia
     if (!file_exists(filename)) {
         std::cerr << "Plik nie istnieje!.\n";
         perror("Błąd podczas otwierania pliku");
@@ -28,15 +30,13 @@ int main() {
     }
     // Parametry taśmy
     int maks_liczba_cegiel = 10; // Maksymalna liczba cegieł
-    int maks_masa = 15;          // Maksymalna masa na tasmie
-    int ladownosc_ciezarowki = 15; // Ładowność każdej ciężarówki
+    int maks_masa = 20;          // Maksymalna masa na tasmie
+    int ladownosc_ciezarowki = 12; // Ładowność każdej ciężarówki
     int liczba_ciezarowek = 3;    // Liczba dostępnych ciężarówek
-    int czas_trwania_symulacji = 3;  //czas w jednej rundzie
-    int liczba_signal1 = 3;  //ile chcemy zeby dyspozytor wydal syngnalow/ ilosc rund
+    int czas_trwania_symulacji = 4;  //czas w jednej rundzie
+    int liczba_signal1 = 2;  //ile chcemy zeby dyspozytor wydal syngnalow/ ilosc rund
 
-    int czas_zaladunku_cegly_do_ciezarowki = 1; // Czas zaladunku cegly
-    int czas_rozladowania_cegiel = 1; // Czas rozladowania cegly
-    int czas_pracy_pracownika = 1; // Czas pracy pracownika
+
     try {
         // std::cout << "WITAJ UZYTKOWNIKU" << std::endl << "WPROWADZ: " << std::endl;
         // maks_liczba_cegiel = wczytajInt("- MAKYMALNA LICZBE CEGIEL NA TASMIE: ");
@@ -67,9 +67,9 @@ int main() {
     mydyspozytor.sygnal2();
       
 
-    } catch (const std::exception& e) {
+    } catch (const std::exception& e) { // Obsługa wyjątków, jeżeli wystąpił jakikolwiek błąd
         std::cerr << "Nieoczekiwany błąd: " << e.what() << std::endl;
-        return 1; // Zakończenie programu z kodem błędu
+        return 1; 
     }
     
     return 0;

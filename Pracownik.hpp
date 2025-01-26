@@ -2,15 +2,14 @@
 #define PRACOWNIK_HPP
 
 #include "Tasma.hpp"
-#include <atomic>
-#include <sys/types.h> // Dla pid_t
-#include <csignal> // Do obsługi sygnałów (np. zatrzymanie procesu)
-#include <sys/prctl.h> // Nagłówek dla prctl()
-#include <chrono>
-#include <iostream>
-#include <sys/types.h>
-#include <unistd.h>
-#include <csignal> // Do obsługi sygnałów (np. zatrzymanie procesu)
+#include <atomic>               // Nagłówek dla typów atomowych, takich jak std::atomic, wykorzystywany do zapewnienia bezpiecznego współdzielenia zmiennych pomiędzy różnymi wątkami.
+#include <sys/types.h>          // Nagłówek, który zawiera definicje podstawowych typów systemowych, takich jak pid_t (typ procesu), uid_t (typ identyfikatora użytkownika), itp.
+#include <csignal>              // Nagłówek dla obsługi sygnałów w systemie, np. SIGINT (przerwanie), SIGTERM (zakończenie), SIGUSR1 (użytkownik zdefiniowany sygnał), itp.
+#include <sys/prctl.h>          // Nagłówek dla prctl(), funkcji systemowej pozwalającej na kontrolowanie zachowania procesu, np. ustawienie jego nazwy w systemie.
+#include <chrono>               // Nagłówek dla funkcji związanych z czasem i datą, takich jak std::chrono::seconds, std::chrono::milliseconds itp., umożliwiający operacje na czasie.
+#include <iostream>             // Nagłówek umożliwiający korzystanie z funkcji do wejścia/wyjścia (np. std::cout, std::cin) do komunikacji z użytkownikiem.
+#include <unistd.h>             // Nagłówek zawierający funkcje systemowe do pracy z procesami, takie jak getpid() (pobranie PID procesu) lub sleep() (spowolnienie działania procesu).
+
 
 #define CZAS_PRACY_PRACOWNIKA 500
 

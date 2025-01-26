@@ -6,6 +6,10 @@
 #include <limits>
 
 
+// Funkcja wczytująca liczbę całkowitą od użytkownika.
+// Zwraca dodatnią liczbę całkowitą wprowadzaną przez użytkownika, 
+// konwertując ewentualne liczby ujemne na dodatnie, 
+// oraz wymusza, by wartość nie była zerem.
 
 int wczytajInt(const std::string& prompt) {
     int liczba;

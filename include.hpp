@@ -17,10 +17,20 @@
 #include <sys/stat.h> // Biblioteka systemowa z funkcjami do pracy z plikami i katalogami w systemach Unix/Linux. Zawiera np. stat() do uzyskania informacji o pliku.
 
 
+// Sprawdza, czy plik o podanej nazwie istnieje
 bool file_exists(const std::string& filename);
+
+// Obsługuje sygnał SIGINT (CTRL+C)
 void sigint_handler(int signum);
+
+// Obsługuje sygnał SIGUSR1 (SIGQUIT CTRL+\ )
 void sigusr1_handler(int signum);
+
+// Obsługuje sygnał SIGUSR1 (kill -USR1 <PID>)
 void handleSignal(int signum);
 
-extern std::ofstream log_file;  
-extern Dyspozytor* dyspozytor; 
+// plik logów, do którego będą zapisywane informacje
+extern std::ofstream log_file;
+
+// wskaźnik do obiektu Dyspozytor
+extern Dyspozytor* dyspozytor;

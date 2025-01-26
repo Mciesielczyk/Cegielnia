@@ -10,6 +10,7 @@ sem_t load_semaphore_;
 Ciezarowka::Ciezarowka(int ladownosc, int id, Tasma &tasma, Dyspozytor &dyspozytor)
     : ladownosc_(ladownosc), id_(id), tasma_(tasma), dyspozytor_(dyspozytor), running_(false), ready_to_load_(false)
 {
+    // Inicjalizacja semafora dla synchronizacji wątków
     if (sem_init(&load_semaphore_, 0, 1) != 0)
     {
         perror("sem_init failed");
@@ -22,72 +23,67 @@ Ciezarowka::~Ciezarowka()
     stop();
     if (thread_.joinable())
     {
-        thread_.join();
+        thread_.join(); // Zatrzymuje wątek, jeżeli jest uruchomiony
     }
     if (sem_destroy(&load_semaphore_) != 0)
     {
-        perror("sem_destroy failed");
+        perror("sem_destroy failed"); // Usuwanie semafora
     }
 }
 
 void Ciezarowka::start()
 {
     running_ = true;
-    thread_ = std::thread(&Ciezarowka::load, this);
+    thread_ = std::thread(&Ciezarowka::load, this); // Uruchomienie wątku
     std::cout << "Ciężarówka " << id_ << " rozpoczęła prace.\n";
 }
 
 void Ciezarowka::stop()
 {
+    // Zatrzymanie wątku
     running_ = false;
 }
 
 void Ciezarowka::load()
 {
-
+    // Pętla odpowiedzialna za ładowanie cegieł na ciężarówkę
     while (true)
     {
         int current_load = 0;
-        sem_wait(&load_semaphore_);
+        sem_wait(&load_semaphore_); // Zatrzymanie dostępu dla innych wątków
         while (running_)
         {
             ready_to_load_ = true;
-            int masa_cegly = tasma_.sprawdz_cegle();
-           // tasma_.debugKolejka();
+            int masa_cegly = tasma_.sprawdz_cegle(); // Sprawdzanie dostępnej cegły
             std::string wiadomosc = "Ciężarówka " + std::to_string(id_) + " sprawdza teoretyczną cegłę o masie: " + std::to_string(masa_cegly);
-            {
-                //std::lock_guard<std::mutex> lock(cout_mutex);
-                std::cout << wiadomosc << std::endl;
-            }
+            std::cout << wiadomosc << std::endl;
 
-            // Sprawdzamy, czy ładunek nie przekroczy ładowności
+            // Sprawdzenie, czy ładunek nie przekroczy ładowności
             if (current_load + masa_cegly > ladownosc_)
             {
-                running_ = false;
+                running_ = false; 
             }
             else if (masa_cegly != 0)
             {
-                masa_cegly = tasma_.pobierz_cegle();
+                masa_cegly = tasma_.pobierz_cegle(); 
                 current_load += masa_cegly;
                 if (masa_cegly != 0)
                 {
-                    {
-                       // std::lock_guard<std::mutex> lock(cout_mutex);
-                        std::cout << "Ciężarówka " << id_ << " załadowała cegłę o masie " << masa_cegly << ". "
-                                  << "Aktualny ładunek: " << current_load << "/" << ladownosc_ << "\n";
-                    }
+                    std::cout << "Ciężarówka " << id_ << " załadowała cegłę o masie " << masa_cegly << ". "
+                              << "Aktualny ładunek: " << current_load << "/" << ladownosc_ << "\n";
                 }
             }
+            
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(CZAS_ZALADUNKU));
-                                                                       
+            std::this_thread::sleep_for(std::chrono::milliseconds(CZAS_ZALADUNKU)); // Symulacja czasu załadunku
+
+            // Sprawdzenie, czy dyspozytor zatrzymał proces i taśma jest pusta
             if (dyspozytor_.getCzyZatrzymal() && tasma_.czy_pusta())
             {
-
-                sem_post(&load_semaphore_); // Podnosimy semafor, pozwalając innym wątkom kontynuować
+                sem_post(&load_semaphore_); // Podnosi semafor, pozwalając innym wątkom kontynuować
                 if (current_load != 0)
                 {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(CZAS_ROZLADUNKU)); // czekamy az dowiezie
+                    std::this_thread::sleep_for(std::chrono::milliseconds(CZAS_ROZLADUNKU)); // Czas na rozładunek
                     std::cout << "Ostatnia ciężarówka " << id_ << " dowiozła cegły." << std::endl;
                 }
                 else
@@ -98,30 +94,26 @@ void Ciezarowka::load()
                 return;
             }
         }
-        {
-
-           // std::lock_guard<std::mutex> lock(cout_mutex);
-            std::cout << "Ciężarówka " << id_ << " jest gotowa do odjazdu. " << "Aktualny ładunek: " << current_load << "\n";
-        }
+        std::cout << "Ciężarówka " << id_ << " jest gotowa do odjazdu. " << "Aktualny ładunek: " << current_load << "\n";
         ready_to_load_ = false;
-        sem_post(&load_semaphore_);                                   // Podnosimy semafor, pozwalając innym wątkom kontynuować
-        std::this_thread::sleep_for(std::chrono::milliseconds(1500)); // Czas rozladunku cegły
+        sem_post(&load_semaphore_); // Podnosi semafor po zakończeniu ładowania
+        std::this_thread::sleep_for(std::chrono::milliseconds(CZAS_ROZLADUNKU)); // Czas na rozładunek
         running_ = true;
     }
 }
 
 int Ciezarowka::getID() const
 {
-    return id_;
+    return id_; 
 }
 
 bool Ciezarowka::isReady()
 {
-    return ready_to_load_;
+    return ready_to_load_; 
 }
 
 bool Ciezarowka::sprawdzStan(Dyspozytor &dyspozytor)
 {
     bool czy = dyspozytor.getCzyZatrzymal();
-    return czy;
+    return czy; 
 }

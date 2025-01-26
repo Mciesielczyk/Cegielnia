@@ -8,7 +8,7 @@ Tasma::Tasma(int maks_liczba_cegiel, int maks_masa)
     utworzPamiecDzielona();
     // Tworzenie semaforów
     sem_mutex_ = sem_open("/semafor_mutex", O_CREAT, 0666, 1);          // Semafor do wzajemnego wykluczania
-    sem_space_available_ = sem_open("/semafor_space", O_CREAT, 0666, 1000); // Semafor na miejsce w kolejce
+    sem_space_available_ = sem_open("/semafor_space", O_CREAT, 0666, maks_liczba_cegiel); // Semafor na miejsce w kolejce
     sem_items_available_ = sem_open("/semafor_items", O_CREAT, 0666, 0);    // Semafor do dostępnych cegieł
 }
 
@@ -55,17 +55,18 @@ void Tasma::utworzPamiecDzielona() {
     shared_queue_->tail = 0;
     shared_queue_->aktualna_masa_ = 0;
 
+   // Zerowanie danych w kolejce
     memset(shared_queue_->data, 0, sizeof(shared_queue_->data));
 }
 
 void Tasma::zwolnijPamiecDzielona() {
     if (shared_queue_) {
-        munmap(shared_queue_, shm_size_);
+        munmap(shared_queue_, shm_size_); // Zwolnienie mapowania pamięci dzielonej
         shared_queue_ = nullptr;
     }
     if (shm_fd_ != -1) {
-        close(shm_fd_);
-        shm_unlink(shm_name_);
+        close(shm_fd_); // Zamknięcie deskryptora pliku pamięci dzielonej
+        shm_unlink(shm_name_); // Usunięcie pamięci dzielonej
         shm_fd_ = -1;
     }
 }
@@ -77,8 +78,9 @@ bool Tasma::dodaj_cegle(int masa_cegly) {
     // Sprawdzenie, czy można dodać cegłę
     bool jest_miejsce_na_cegle = (shared_queue_->tail + 1) % 1000 != shared_queue_->head;
     bool masa_w_normie = (shared_queue_->aktualna_masa_ + masa_cegly <= maks_masa_);
+    bool nie_przekroczono_limitu_cegiel = (shared_queue_->tail - shared_queue_->head + 1000) % 1000 < maks_liczba_cegiel_;  // Sprawdzenie liczby cegieł
 
-    if (jest_miejsce_na_cegle && masa_w_normie) {
+    if (jest_miejsce_na_cegle && masa_w_normie && nie_przekroczono_limitu_cegiel) {
         // Dodawanie cegły
         shared_queue_->data[shared_queue_->tail] = masa_cegly;
         shared_queue_->tail = (shared_queue_->tail + 1) % 1000;
@@ -128,7 +130,9 @@ int Tasma::sprawdz_cegle() {
     sem_wait(sem_mutex_);
 
     int masa_cegly = shared_queue_->data[shared_queue_->head];
-
+    if (masa_cegly == 0) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Jesli nie ma cegly to czekamy
+    }
     // Odblokowanie semafora mutex
     sem_post(sem_mutex_);
     
@@ -136,9 +140,10 @@ int Tasma::sprawdz_cegle() {
 }
 
 bool Tasma::czy_pusta() const {
-    return shared_queue_->head == shared_queue_->tail;
+    return shared_queue_->head == shared_queue_->tail; 
 }
 
+// Funkcja pomocnicza
 void Tasma::debugKolejka() {
     std::cout << "Head: " << shared_queue_->head
               << ", Tail: " << shared_queue_->tail

@@ -39,7 +39,7 @@ void Dyspozytor::sygnal1(){
     for(auto& ciezarowka : ciezarowki_){
         if(ciezarowka->isReady()){
                  std::cout << "\x1b[35mDyspozytor wysyła sygnal.------------------------ \x1b[0m" << std::endl;
-                 ciezarowka->stop();
+                 ciezarowka->stop(); // Zatrzymuje ciężarówkę, wysyłając sygnał
                  break;
         }
     }
