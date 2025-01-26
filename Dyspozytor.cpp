@@ -18,7 +18,7 @@ Dyspozytor::Dyspozytor(Tasma& tasma, int liczba_ciezarowek, int ladownosc_ciezar
 Dyspozytor::~Dyspozytor() {}
 
 void Dyspozytor::startPracownikow() {
-std::cout << "\x1b[35mDyspozytor rozpoczyna pracę pracowników.\x1b[0m" << std::endl;
+std::cout << "\x1b[33mDyspozytor rozpoczyna pracę pracowników.\x1b[0m" << std::endl;
 
     for (auto& pracownik : pracownicy_) {
         pracownik->start();  // Uruchomienie pracy każdego pracownika
@@ -26,7 +26,7 @@ std::cout << "\x1b[35mDyspozytor rozpoczyna pracę pracowników.\x1b[0m" << std:
 }
 
 void Dyspozytor::sygnal2() {
-std::cout << "\x1b[35mDyspozytor zatrzymuje pracowników. \x1b[0m" << std::endl;
+std::cout << "\x1b[33mDyspozytor zatrzymuje pracowników. \x1b[0m" << std::endl;
     
     for (auto& pracownik : pracownicy_) {
         pracownik->stop();  // Zatrzymanie każdego pracownika
@@ -38,7 +38,7 @@ std::cout << "\x1b[35mDyspozytor zatrzymuje pracowników. \x1b[0m" << std::endl;
 void Dyspozytor::sygnal1(){
     for(auto& ciezarowka : ciezarowki_){
         if(ciezarowka->isReady()){
-                 std::cout << "\x1b[35mDyspozytor wysyła sygnal.------------------------ \x1b[0m" << std::endl;
+                 std::cout << "\x1b[33mDyspozytor wysyła sygnal.------------------------ \x1b[0m" << std::endl;
                  ciezarowka->stop(); // Zatrzymuje ciężarówkę, wysyłając sygnał
                  break;
         }
@@ -46,7 +46,7 @@ void Dyspozytor::sygnal1(){
 }
 
 void Dyspozytor::startCiezarowek(){
-std::cout << "\x1b[35mDyspozytor rozpoczyna pracę ciężarówek. \x1b[0m" << std::endl;
+std::cout << "\x1b[33mDyspozytor rozpoczyna pracę ciężarówek. \x1b[0m" << std::endl;
 
     for (auto& ciezarowka : ciezarowki_) {
         ciezarowka->start();  

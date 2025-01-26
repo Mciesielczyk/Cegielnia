@@ -38,15 +38,15 @@ int main() {
 
 
     try {
-        // std::cout << "WITAJ UZYTKOWNIKU" << std::endl << "WPROWADZ: " << std::endl;
-        // maks_liczba_cegiel = wczytajInt("- MAKYMALNA LICZBE CEGIEL NA TASMIE: ");
-        // maks_masa = wczytajInt("- MAKSYMALNA MASE CEGIEL NA TASMIE: ");
-        // ladownosc_ciezarowki = wczytajInt("- ŁADOWNOŚĆ CIEŻARÓWKI: ");
-        // liczba_ciezarowek = wczytajInt("- LICZBA CIEŻARÓWEK: ");
-        // liczba_signal1 = wczytajInt("- LICZBA SYGNAŁÓW 1: ");
-        // czas_trwania_symulacji = wczytajInt("- CZAS TRWANIA SYMULACJI (w sekundach): ");
+         std::cout << "WITAJ UZYTKOWNIKU" << std::endl << "WPROWADZ: " << std::endl;
+         maks_liczba_cegiel = wczytajInt("- MAKYMALNA LICZBE CEGIEL NA TASMIE: ");
+         maks_masa = wczytajInt("- MAKSYMALNA MASE CEGIEL NA TASMIE: ");
+         ladownosc_ciezarowki = wczytajLadownosc();
+        liczba_ciezarowek = wczytajInt("- LICZBA CIEŻARÓWEK: ");
+         liczba_signal1 = wczytajInt("- LICZBA SYGNAŁÓW 1: ");
+        czas_trwania_symulacji = wczytajInt("- CZAS TRWANIA SYMULACJI (w sekundach): ");
 
-       // czas_trwania_symulacji = czas_trwania_symulacji / liczba_signal1;
+        czas_trwania_symulacji = czas_trwania_symulacji / liczba_signal1;
 
         Tasma tasma(maks_liczba_cegiel, maks_masa);
         Dyspozytor mydyspozytor(tasma,liczba_ciezarowek,ladownosc_ciezarowki);

@@ -74,19 +74,19 @@ void Tasma::zwolnijPamiecDzielona() {
 bool Tasma::dodaj_cegle(int masa_cegly) {
     // Zablokowanie semafora mutex
     sem_wait(sem_mutex_);
-
+    debugKolejka();
     // Sprawdzenie, czy można dodać cegłę
-    bool jest_miejsce_na_cegle = (shared_queue_->tail + 1) % 1000 != shared_queue_->head;
+    bool jest_miejsce_na_cegle = (shared_queue_->tail + 1) % 100 != shared_queue_->head;
     bool masa_w_normie = (shared_queue_->aktualna_masa_ + masa_cegly <= maks_masa_);
-    bool nie_przekroczono_limitu_cegiel = (shared_queue_->tail - shared_queue_->head + 1000) % 1000 < maks_liczba_cegiel_;  // Sprawdzenie liczby cegieł
+    bool nie_przekroczono_limitu_cegiel = (shared_queue_->tail - shared_queue_->head + 100) % 100 < maks_liczba_cegiel_;  // Sprawdzenie liczby cegieł
 
     if (jest_miejsce_na_cegle && masa_w_normie && nie_przekroczono_limitu_cegiel) {
         // Dodawanie cegły
         shared_queue_->data[shared_queue_->tail] = masa_cegly;
-        shared_queue_->tail = (shared_queue_->tail + 1) % 1000;
+        shared_queue_->tail = (shared_queue_->tail + 1) % 100;
         shared_queue_->aktualna_masa_ += masa_cegly;
 
-        std::cout << "Dodano cegłę o masie: " << masa_cegly << "\n";
+        //std::cout << "Dodano cegłę o masie: " << masa_cegly << "\n";
         
         // Odblokowanie semafora mutex
         sem_post(sem_mutex_);
@@ -108,10 +108,10 @@ int Tasma::pobierz_cegle() {
 
     // Zablokowanie semafora mutex
     sem_wait(sem_mutex_);
-
+    debugKolejka();
     // Pobieranie cegły
     int masa_cegly = shared_queue_->data[shared_queue_->head];
-    shared_queue_->head = (shared_queue_->head + 1) % 1000;
+    shared_queue_->head = (shared_queue_->head + 1) % 100;
     shared_queue_->aktualna_masa_ -= masa_cegly;
 
     std::cout << "Pobrano cegłę o masie: " << masa_cegly << ". Aktualna masa: " << shared_queue_->aktualna_masa_ << "\n";
@@ -127,11 +127,14 @@ int Tasma::pobierz_cegle() {
 
 int Tasma::sprawdz_cegle() {
     // Zablokowanie semafora mutex
+    int masa_cegly = 0;
     sem_wait(sem_mutex_);
-
-    int masa_cegly = shared_queue_->data[shared_queue_->head];
+    debugKolejka();
+    if(shared_queue_->aktualna_masa_ != 0) {
+     masa_cegly = shared_queue_->data[shared_queue_->head];
     if (masa_cegly == 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Jesli nie ma cegly to czekamy
+    }
     }
     // Odblokowanie semafora mutex
     sem_post(sem_mutex_);

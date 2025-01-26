@@ -38,3 +38,16 @@ int wczytajInt(const std::string& prompt) {
     }
     
 }
+
+
+int wczytajLadownosc() {
+    int ladownosc;
+    do {
+        ladownosc = wczytajInt("- ŁADOWNOŚĆ CIEŻARÓWKI (min. 3): ");
+        if (ladownosc < 3) {
+            std::cout << "Ładowność ciężarówki musi być większa lub równa 3. Spróbuj ponownie.\n";
+        }
+    } while (ladownosc < 3);
+
+    return ladownosc;
+}

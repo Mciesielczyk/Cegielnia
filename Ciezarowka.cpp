@@ -35,7 +35,8 @@ void Ciezarowka::start()
 {
     running_ = true;
     thread_ = std::thread(&Ciezarowka::load, this); // Uruchomienie wątku
-    std::cout << "Ciężarówka " << id_ << " rozpoczęła prace.\n";
+    std::cout << "\033[35mCiężarówka " << id_ << " rozpoczęła prace.\n\033[0m";
+
 }
 
 void Ciezarowka::stop()
@@ -55,8 +56,8 @@ void Ciezarowka::load()
         {
             ready_to_load_ = true;
             int masa_cegly = tasma_.sprawdz_cegle(); // Sprawdzanie dostępnej cegły
-            std::string wiadomosc = "Ciężarówka " + std::to_string(id_) + " sprawdza teoretyczną cegłę o masie: " + std::to_string(masa_cegly);
-            std::cout << wiadomosc << std::endl;
+            std::cout << "\033[35mCiężarówka " << id_ << " sprawdza teoretyczną cegłę o masie: " << std::to_string(masa_cegly) << "\033[0m" << std::endl;
+            
 
             // Sprawdzenie, czy ładunek nie przekroczy ładowności
             if (current_load + masa_cegly > ladownosc_)
@@ -69,8 +70,8 @@ void Ciezarowka::load()
                 current_load += masa_cegly;
                 if (masa_cegly != 0)
                 {
-                    std::cout << "Ciężarówka " << id_ << " załadowała cegłę o masie " << masa_cegly << ". "
-                              << "Aktualny ładunek: " << current_load << "/" << ladownosc_ << "\n";
+                    std::cout << "\033[35mCiężarówka " << id_ << " załadowała cegłę o masie " << masa_cegly << ". "
+                     << "Aktualny ładunek: " << current_load << "/" << ladownosc_ << "\n\033[0m";
                 }
             }
             
@@ -84,20 +85,23 @@ void Ciezarowka::load()
                 if (current_load != 0)
                 {
                     std::this_thread::sleep_for(std::chrono::milliseconds(CZAS_ROZLADUNKU)); // Czas na rozładunek
-                    std::cout << "Ostatnia ciężarówka " << id_ << " dowiozła cegły." << std::endl;
+                    std::cout << "\033[35mOstatnia ciężarówka " << id_ << " dowiozła cegły.\033[0m" << std::endl;
                 }
                 else
                 {
-                    std::cout << "Ciężarówka " << id_ << " konczy zywot " << std::endl;
+                    std::cout << "\033[35mCiężarówka " << id_ << " konczy zywot \033[0m" << std::endl;
                 }
                 stop();
                 return;
             }
         }
-        std::cout << "Ciężarówka " << id_ << " jest gotowa do odjazdu. " << "Aktualny ładunek: " << current_load << "\n";
+        std::cout << "\033[35mCiężarówka " << id_ << " jest gotowa do odjazdu. " << "Aktualny ładunek: " << current_load << "\n\033[0m";
         ready_to_load_ = false;
         sem_post(&load_semaphore_); // Podnosi semafor po zakończeniu ładowania
         std::this_thread::sleep_for(std::chrono::milliseconds(CZAS_ROZLADUNKU)); // Czas na rozładunek
+        
+        
+        
         running_ = true;
     }
 }

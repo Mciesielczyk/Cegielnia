@@ -7,7 +7,7 @@
 #include <semaphore.h>
 
 #define CZAS_ZALADUNKU 100
-#define CZAS_ROZLADUNKU 1000
+#define CZAS_ROZLADUNKU 1500
 
 class Dyspozytor;
 
@@ -50,9 +50,9 @@ public:
      */
     void load();
 
-    /**
-     * Funkcja zwracająca unikalny identyfikator ciężarówki.
-     */
+    
+      //Funkcja zwracająca unikalny identyfikator ciężarówki.
+     
     int getID() const;
 
     /**
@@ -61,11 +61,10 @@ public:
      */
     bool isReady();
 
-    /**
-     * Funkcja sprawdzająca stan dyspozytora, określa, czy należy zakończyć pracę.
-     * 
-     * True, jeśli dyspozytor zatrzymał proces, w przeciwnym razie false.
-     */
+    
+      //Funkcja sprawdzająca stan dyspozytora, określa, czy należy zakończyć pracę.
+      //True, jeśli dyspozytor zatrzymał proces, w przeciwnym razie false.
+    
     bool sprawdzStan(Dyspozytor& dyspozytor);
 
 
