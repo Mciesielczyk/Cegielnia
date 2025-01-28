@@ -48,6 +48,8 @@ void Tasma::usunIstniejaceSemafory() {
         sem_unlink("/semafor_items");  // Usuwanie semafora
     }
 }
+
+
 void Tasma::usunIstniejacaPamiecDzielona() {
     // Usuwanie istniejącej pamięci dzielonej (jeśli istnieje)
     int fd = shm_open(shm_name_, O_RDWR, 0666);  // Próba otwarcia pamięci dzielonej
@@ -107,14 +109,14 @@ bool Tasma::dodaj_cegle(int masa_cegly) {
     sem_wait(sem_mutex_);
     debugKolejka();
     // Sprawdzenie, czy można dodać cegłę
-    bool jest_miejsce_na_cegle = (shared_queue_->tail + 1) % 100 != shared_queue_->head;
+    bool jest_miejsce_na_cegle = (shared_queue_->tail + 1) % 100000000 != shared_queue_->head;
     bool masa_w_normie = (shared_queue_->aktualna_masa_ + masa_cegly <= maks_masa_);
-    bool nie_przekroczono_limitu_cegiel = (shared_queue_->tail - shared_queue_->head + 100) % 100 < maks_liczba_cegiel_;  // Sprawdzenie liczby cegieł
+    bool nie_przekroczono_limitu_cegiel = (shared_queue_->tail - shared_queue_->head + 100000000) % 100000000 < maks_liczba_cegiel_;  // Sprawdzenie liczby cegieł
 
     if (jest_miejsce_na_cegle && masa_w_normie && nie_przekroczono_limitu_cegiel) {
         // Dodawanie cegły
         shared_queue_->data[shared_queue_->tail] = masa_cegly;
-        shared_queue_->tail = (shared_queue_->tail + 1) % 100;
+        shared_queue_->tail = (shared_queue_->tail + 1) % 100000000;
         shared_queue_->aktualna_masa_ += masa_cegly;
 
         //std::cout << "Dodano cegłę o masie: " << masa_cegly << "\n";
@@ -142,7 +144,7 @@ int Tasma::pobierz_cegle() {
     debugKolejka();
     // Pobieranie cegły
     int masa_cegly = shared_queue_->data[shared_queue_->head];
-    shared_queue_->head = (shared_queue_->head + 1) % 100;
+    shared_queue_->head = (shared_queue_->head + 1) % 100000000;
     shared_queue_->aktualna_masa_ -= masa_cegly;
 
     std::cout << "Pobrano cegłę o masie: " << masa_cegly << ". Aktualna masa: " << shared_queue_->aktualna_masa_ << "\n";

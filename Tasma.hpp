@@ -56,7 +56,7 @@ private:
     int shm_fd_;                             // Deskryptor pliku pamięci dzielonej
     size_t shm_size_;                        // Rozmiar segmentu pamięci dzielonej
     struct SharedQueue {
-        int data[100];      // Tablica przechowująca cegły w postaci masy
+        int data[100000001];      // Tablica przechowująca cegły w postaci masy
         int head;            // Wskaźnik na początek kolejki
         int tail;            // Wskaźnik na koniec kolejki
         int aktualna_masa_;  // Bieżąca masa cegieł na taśmie
@@ -65,7 +65,8 @@ private:
    
     void utworzPamiecDzielona();  // Funkcja tworząca segment pamięci dzielonej
     void zwolnijPamiecDzielona(); // Funkcja zwalniająca segment pamięci dzielonej
- // Funkcja do usuwania istniejących semaforów
+
+    // Funkcja do usuwania istniejących semaforów
     void usunIstniejaceSemafory();
 
     // Funkcja do usuwania istniejącej pamięci dzielonej
