@@ -5,11 +5,15 @@
 
 Tasma::Tasma(int maks_liczba_cegiel, int maks_masa)
     : maks_liczba_cegiel_(maks_liczba_cegiel), maks_masa_(maks_masa), shm_fd_(-1), shm_size_(sizeof(SharedQueue)) {
+    
+    usunIstniejaceSemafory();
+    usunIstniejacaPamiecDzielona();
+    
     utworzPamiecDzielona();
     // Tworzenie semaforów
-    sem_mutex_ = sem_open("/semafor_mutex", O_CREAT, 0666, 1);          // Semafor do wzajemnego wykluczania
-    sem_space_available_ = sem_open("/semafor_space", O_CREAT, 0666, maks_liczba_cegiel); // Semafor na miejsce w kolejce
-    sem_items_available_ = sem_open("/semafor_items", O_CREAT, 0666, 0);    // Semafor do dostępnych cegieł
+    sem_mutex_ = sem_open("/semafor_mutex", O_CREAT, 0600, 1);          // Semafor do wzajemnego wykluczania
+    sem_space_available_ = sem_open("/semafor_space", O_CREAT, 0600, maks_liczba_cegiel); // Semafor na miejsce w kolejce
+    sem_items_available_ = sem_open("/semafor_items", O_CREAT, 0600, 0);    // Semafor do dostępnych cegieł
 }
 
 Tasma::~Tasma() {
@@ -24,10 +28,37 @@ Tasma::~Tasma() {
     sem_close(sem_items_available_);
     sem_unlink("/semafor_items");
 }
+void Tasma::usunIstniejaceSemafory() {
+    // Sprawdzenie i usunięcie semaforów, jeśli istnieją
+    sem_t* sem = sem_open("/semafor_mutex", O_EXCL);  // Próba otwarcia semafora bez jego tworzenia
+    if (sem != SEM_FAILED) {
+        sem_close(sem);
+        sem_unlink("/semafor_mutex");  // Usuwanie semafora
+    }
 
+    sem = sem_open("/semafor_space", O_EXCL);  // Sprawdzanie semafora "semafor_space"
+    if (sem != SEM_FAILED) {
+        sem_close(sem);
+        sem_unlink("/semafor_space");  // Usuwanie semafora
+    }
+
+    sem = sem_open("/semafor_items", O_EXCL);  // Sprawdzanie semafora "semafor_items"
+    if (sem != SEM_FAILED) {
+        sem_close(sem);
+        sem_unlink("/semafor_items");  // Usuwanie semafora
+    }
+}
+void Tasma::usunIstniejacaPamiecDzielona() {
+    // Usuwanie istniejącej pamięci dzielonej (jeśli istnieje)
+    int fd = shm_open(shm_name_, O_RDWR, 0666);  // Próba otwarcia pamięci dzielonej
+    if (fd != -1) {
+        close(fd);              // Zamknięcie deskryptora
+        shm_unlink(shm_name_);  // Usuwanie pamięci dzielonej
+    }
+}
 void Tasma::utworzPamiecDzielona() {
     // Tworzenie/otwieranie pamięci dzielonej
-    shm_fd_ = shm_open(shm_name_, O_CREAT | O_RDWR, 0666);
+    shm_fd_ = shm_open(shm_name_, O_CREAT | O_RDWR, 0600);
     if (shm_fd_ == -1) {
         perror("shm_open");
         throw std::runtime_error("Nie udało się utworzyć pamięci dzielonej");

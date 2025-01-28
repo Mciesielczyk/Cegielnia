@@ -15,6 +15,7 @@
 #include <cstdio>     // Standardowa biblioteka C do obsługi funkcji wejścia/wyjścia, takich jak printf(), perror(), itp.
 #include <cerrno>     // Zawiera definicje kodów błędów systemowych, np. errno, który przechowuje kody błędów funkcji systemowych.
 #include <sys/stat.h> // Biblioteka systemowa z funkcjami do pracy z plikami i katalogami w systemach Unix/Linux. Zawiera np. stat() do uzyskania informacji o pliku.
+#include <atomic>
 
 
 // Sprawdza, czy plik o podanej nazwie istnieje
@@ -34,3 +35,8 @@ extern std::ofstream log_file;
 
 // wskaźnik do obiektu Dyspozytor
 extern Dyspozytor* dyspozytor;
+
+extern std::atomic<bool> flaga1;
+
+extern std::mutex mtx;
+extern std::condition_variable cv;

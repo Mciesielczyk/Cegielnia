@@ -6,7 +6,6 @@ int main() {
 
     pid_t pid = getpid();  // Pobieramy PID aktualnego procesu
     std::cout << "PID aktualnego procesu: " << pid << std::endl;
-
     // Rejestracja funkcji obsługi sygnałów:
     signal(SIGINT, sigint_handler);
     signal(SIGQUIT, sigusr1_handler);
@@ -42,9 +41,9 @@ int main() {
          maks_liczba_cegiel = wczytajInt("- MAKYMALNA LICZBE CEGIEL NA TASMIE: ");
          maks_masa = wczytajInt("- MAKSYMALNA MASE CEGIEL NA TASMIE: ");
          ladownosc_ciezarowki = wczytajLadownosc();
-        liczba_ciezarowek = wczytajInt("- LICZBA CIEŻARÓWEK: ");
+         liczba_ciezarowek = wczytajInt("- LICZBA CIEŻARÓWEK: ");
          liczba_signal1 = wczytajInt("- LICZBA SYGNAŁÓW 1: ");
-        czas_trwania_symulacji = wczytajInt("- CZAS TRWANIA SYMULACJI (w sekundach): ");
+         czas_trwania_symulacji = wczytajInt("- CZAS TRWANIA SYMULACJI (w sekundach): ");
 
         czas_trwania_symulacji = czas_trwania_symulacji / liczba_signal1;
 
@@ -56,15 +55,31 @@ int main() {
         //tu sie wykonuje 
         for (int i = 0; i < liczba_signal1; i++)
             {
-             std::this_thread::sleep_for(std::chrono::seconds(czas_trwania_symulacji));
-             if(i!=liczba_signal1-1)  mydyspozytor.sygnal1();
+            std::unique_lock<std::mutex> lock(mtx);  // Lock na mutexie
+           // Czekamy na zdarzenie przez określony czas, ale jeśli flaga1 jest ustawiona na true, przerwiemy oczekiwanie
+            cv.wait_for(
+                 lock,  // Mutex, który jest trzymany przez wątek
+                 std::chrono::seconds(czas_trwania_symulacji),  // Określony czas oczekiwania
+                 [] {  // Funkcja lambda, która zwraca true, jeśli flaga1 jest ustawiona na true
+                 return flaga1.load(); 
+                 }
+                );
+
+
+            if(i!=liczba_signal1-1)  mydyspozytor.sygnal1();
             
             //mozliwosc korzystania z ctrl+c do wysylania sygnalu
+           if (flaga1 == true) {
+                std::cout << "Pętla przerwana.\n";
+                break;  // Wyjście z pętli po otrzymaniu sygnału
+            }
             }
     
 
     // Zatrzymanie pracy
+   
     mydyspozytor.sygnal2();
+    
       
 
     } catch (const std::exception& e) { // Obsługa wyjątków, jeżeli wystąpił jakikolwiek błąd

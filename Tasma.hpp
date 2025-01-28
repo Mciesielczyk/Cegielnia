@@ -65,6 +65,11 @@ private:
    
     void utworzPamiecDzielona();  // Funkcja tworząca segment pamięci dzielonej
     void zwolnijPamiecDzielona(); // Funkcja zwalniająca segment pamięci dzielonej
+ // Funkcja do usuwania istniejących semaforów
+    void usunIstniejaceSemafory();
+
+    // Funkcja do usuwania istniejącej pamięci dzielonej
+    void usunIstniejacaPamiecDzielona();
 };
 
 
